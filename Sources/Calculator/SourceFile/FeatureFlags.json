@@ -1,0 +1,12 @@
+{
+    "calculator": {
+        "showPlusOperatorr": true,
+        "showMinusOperator": true,
+        "showMultiplyOperator": true,
+        "showDivisionOperator": true,
+        "showEqualOperator": true,
+        "showSinOperator": true,
+        "showCosOperator": true,
+        "showOnlineOperator": false
+    }
+}

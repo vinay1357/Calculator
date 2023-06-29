@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "calculatoruicomponent",
+      "kind" : "localSourceControl",
+      "location" : "/Users/vinaykamra/Downloads/CalculatorUIComponent",
+      "state" : {
+        "branch" : "main",
+        "revision" : "f8f48ff40a6c9f5cc2e798793bbab5e6cf048365"
+      }
+    },
+    {
+      "identity" : "themekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vinay1357/ThemeKit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "6bfb802bd44f5ee60a8be9246f09690d36b4d380"
+      }
+    }
+  ],
+  "version" : 2
+}
