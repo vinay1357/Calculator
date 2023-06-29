@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vinay1357/ThemeKit.git", .branch("main")),
         
-        .package(url: "../CalculatorUIComponent", .branch("main"))
+        .package(url: "https://github.com/vinay1357/CalculatorUIComponent", .branch("main"))
 
     ],
 
