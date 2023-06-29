@@ -13,8 +13,8 @@ public protocol CalculatorParserProtocol {
 
 public class RegularExpressionParser: CalculatorParserProtocol {
     public func parseString(rawValue: String) throws -> Double {
-        let lexer = Tokenizer(input: rawValue)
-        let parser = try Parser(lexer: lexer)
+        let tokenizer = Tokenizer(input: rawValue)
+        let parser = try Parser(tokenizer: tokenizer)
         return try parser.parse()
     }
     
@@ -74,7 +74,7 @@ class Tokenizer {
                 if  digit.isNumber || digit == "." {
                     
                     if isDecimalNumber && digit == "." {
-                        throw ParserError.invalidNumber
+                        throw ParserError.inValidExpression
                     }
                     number.append(digit)
                     position = input.index(after: position)
@@ -112,19 +112,19 @@ class Tokenizer {
 
 // Define the Parser to parse and evaluate the expression
 class Parser {
-    let lexer: Tokenizer
+    let tokenizer: Tokenizer
     var currentToken: Token
     var isDecimalNumer: Bool = false
 
-    init(lexer: Tokenizer) throws {
-        self.lexer = lexer
-        self.currentToken = try lexer.getNextToken()
+    init(tokenizer: Tokenizer) throws {
+        self.tokenizer = tokenizer
+        self.currentToken = try tokenizer.getNextToken()
     }
 
     // Helper method to match the expected token type
     func eat(_ expectedType: TokenType) throws {
         if currentToken.type == expectedType {
-            currentToken = try lexer.getNextToken()
+            currentToken = try tokenizer.getNextToken()
         } else {
             throw ParserError.invalidNumber
         }
@@ -157,6 +157,7 @@ class Parser {
                     throw ParserError.divideByZero
                 }
                 result =  result / value
+
             }
         }
 
@@ -171,6 +172,7 @@ class Parser {
             if token.type == .plus {
                 try eat(.plus)
                 result += try term()
+
             } else if token.type == .minus {
                 try eat(.minus)
                 result -= try term()
