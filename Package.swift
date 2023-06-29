@@ -36,5 +36,7 @@ let package = Package(
         .testTarget(
             name: "CalculatorTests",
             dependencies: ["Calculator"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
+
 )
