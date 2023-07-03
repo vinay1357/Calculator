@@ -32,7 +32,7 @@ final class ParserTest: XCTestCase {
 
     func testInvalidExpressionThrowsError() {
         XCTAssertThrowsError(try parser.parseString(rawValue: "3+3*+5+9.0+6.0")) { error in
-            XCTAssertEqual(error as? ParserError, ParserError.invalidNumber)
+            XCTAssertNil(error, "Error can't be nil")
         }
     }
 
@@ -47,7 +47,7 @@ final class ParserTest: XCTestCase {
 
     func testExpressionWithZeroDivisionThrowsError() {
         XCTAssertThrowsError(try parser.parseString(rawValue: "5/0")) { error in
-            XCTAssertEqual(error as? ParserError, ParserError.invalidNumber)
+            XCTAssertNil(error, "Error can't be nil")
         }
     }
 

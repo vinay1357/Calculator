@@ -12,7 +12,7 @@ extension String {
         if withDecimal == 0 {
             return NumberFormatter().number(from: self)?.doubleValue
         } else {
-            return Double(self)?.nextUp ?? 0.0
+            return Double(self) ?? 0.0
         }
     }
 }

@@ -74,7 +74,7 @@ class Tokenizer {
                 if  digit.isNumber || digit == "." {
                     
                     if isDecimalNumber && digit == "." {
-                        throw ParserError.inValidExpression
+                        throw ParserError.inValidExpression(input:"Multiple . in the expression \(input)")
                     }
                     number.append(digit)
                     position = input.index(after: position)
@@ -89,7 +89,7 @@ class Tokenizer {
                     maxDecimalPrecision = max(decimalPoint, maxDecimalPrecision)
                     break
                 }
-
+                
             }
             return Token(type: .number, value: number, decimalPoint: decimalPoint)
         case "+":
@@ -105,7 +105,7 @@ class Tokenizer {
             position = input.index(after: position)
             return Token(type: .divide, value: "/")
         default:
-            throw ParserError.nonSupportedOperator
+            throw ParserError.nonSupportedOperator(input: "No supportive operator in input \(input)")
         }
     }
 }
@@ -126,7 +126,7 @@ class Parser {
         if currentToken.type == expectedType {
             currentToken = try tokenizer.getNextToken()
         } else {
-            throw ParserError.invalidNumber
+            throw ParserError.invalidNumber(input: currentToken.value)
         }
     }
 
@@ -138,7 +138,7 @@ class Parser {
             try eat(.number)
             return token.value.toDouble(withDecimal: token.decimalPoint) ?? 0.0
         default:
-            throw ParserError.invalidNumber
+            throw ParserError.invalidNumber(input: token.value)
         }
     }
 
