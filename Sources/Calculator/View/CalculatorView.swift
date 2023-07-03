@@ -12,11 +12,11 @@ public struct CalculatorView: View {
 
     @ObservedObject var viewModel = CalculatorViewModel(screenViewModel: CALCScreenViewModel(screenText: "0", style: CALCScreenViewStyle()))
     
-    @State var orientation: UIDeviceOrientation = UIDevice.current.orientation
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     public init(viewModel: CalculatorViewModel = CalculatorViewModel(screenViewModel: CALCScreenViewModel(screenText: "0", style: CALCScreenViewStyle())), orientation: UIDeviceOrientation =  UIDevice.current.orientation) {
         self.viewModel = viewModel
-        self.orientation = orientation
     }
     
     public var body: some View {
@@ -26,30 +26,25 @@ public struct CalculatorView: View {
                 HStack {
                     ScreenView(viewModel: viewModel.screenViewModel)
                 }
-                .frame(height: 150)
-                .padding(.all, 20)
-                if orientation == .landscapeLeft || orientation == .landscapeRight {
-                    landscapeView()
-                } else {
+                .frame(height: 100)
+                .padding(.all, 10)
+                if verticalSizeClass == .regular && horizontalSizeClass == .compact  {
                     portraitView()
+                } else {
+                    landscapeView()
                 }
             }
         }
         .onAppear {
             viewModel.onAppear()
-            orientation = UIDevice.current.orientation
         }
         .ignoresSafeArea(.all)
-        
-        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-            orientation = UIDevice.current.orientation
-        }
         .toast(data: $viewModel.toastVM)
     }
     
     func landscapeView() -> some View {
         VStack {
-            HStack {
+            HStack(spacing: 12) {
                 VStack {
                     ForEach (viewModel.buttons, id: \.self) { row in
                         HStack(spacing: 12) {
@@ -74,9 +69,10 @@ public struct CalculatorView: View {
                             .padding(.bottom, 3)
                     }
                 }
+                
             }
-            
-            
+            .fixedSize()
+            .fixedSize(horizontal: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         }
     }
     
@@ -109,6 +105,10 @@ public struct CalculatorView: View {
                 }
             }
         }
+        .fixedSize()
+        .fixedSize(horizontal: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+        .padding(.bottom, 10)
+        
     }
     
 }
