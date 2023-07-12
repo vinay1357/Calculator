@@ -12,7 +12,6 @@ enum OnlineOperatorError: Error {
     case invalidInput(input: String)
     case bitCoinRatesNotAvailable
     
-    
     var description: String {
         switch(self) {
         case let .invalidInput(input):
@@ -37,8 +36,7 @@ public class BitCoinOnlineOperation: OnlineOperationProtocol {
         guard let value = Double(inputValue) else {
             throw OnlineOperatorError.invalidInput(input: inputValue)
         }
-        let manager = CoinLayerNetworkApiManager()
-        let response: MarketModel = try await manager.perform(CoinLayerLiveDataRequest.liveData)
+        let response: MarketModel = try await netWorkmanager.perform(CoinLayerLiveDataRequest.liveData)
         if let rate = response.rates["BTC"] {
             return rate * value
         } else {
