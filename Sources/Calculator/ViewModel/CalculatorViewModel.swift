@@ -11,7 +11,7 @@ import ThemeKit
 import CalculatorUIComponent
 
 enum ConversionError: Error {
-    case NotANumber
+    case notANumber
 }
 
 public final class CalculatorViewModel: ObservableObject {
@@ -29,18 +29,18 @@ public final class CalculatorViewModel: ObservableObject {
     let reachability: NetworkReachability = NetworkReachability.shared
     let onlineOperationManager: OnlineOperationProtocol
     var screenText: String {
-        set {
-            self.screenViewModel.screenText = newValue
-        }
         get {
             self.screenViewModel.screenText
+        }
+        set {
+            self.screenViewModel.screenText = newValue
         }
     }
     
     public init(featureFlags: CalculatorFeatureFlags = CalculatorFeatureFlags.featureFlags,
-         regularExpressionParser: CalculatorParserProtocol = RegularExpressionParser(),
-         onlineOperationManager: OnlineOperationProtocol = BitCoinOnlineOperation(),
-         screenViewModel:CALCScreenViewModel ) {
+                regularExpressionParser: CalculatorParserProtocol = RegularExpressionParser(),
+                onlineOperationManager: OnlineOperationProtocol = BitCoinOnlineOperation(),
+                screenViewModel: CALCScreenViewModel ) {
         self.featureFlags = featureFlags
         self.regularExpressionParser = regularExpressionParser
         self.screenViewModel = screenViewModel
@@ -124,14 +124,12 @@ public final class CalculatorViewModel: ObservableObject {
     }
     
     func onAppear() {
-        
         self.startNetworkMonitoring()
         
         let allowedOperations = self.allowedOperations()
         
         if allowedOperations.count > 4 {
             topOperations = Array(allowedOperations[..<4])
-            
             rightOperations = Array(allowedOperations[4..<allowedOperations.count])
         } else {
             rightOperations = allowedOperations
@@ -140,14 +138,11 @@ public final class CalculatorViewModel: ObservableObject {
     }
     
     func getNumbersButton() -> [[CALCButtonViewModel]] {
-        
         let style = CALCButtonTypeStyle(buttonStyle: .numbers)
-        
         let numbersSequence2D: [[CalculatorButton]] = [[.seven, .eight, .nine ],
                                                        [.four, .five, .six],
                                                        [.one, .two, .three],
                                                        [.clearText, .zero, .dot]]
-        
         let numberButtons: [[CALCButtonViewModel]] = numbersSequence2D.map { numbers in
             return numbers.map { value in
                 return CALCButtonViewModel(style: style, type: value, handleButtonTapAction: handleTabActionButton)
@@ -176,25 +171,21 @@ public final class CalculatorViewModel: ObservableObject {
                 await MainActor.run {
                     self.screenText = value.clean
                 }
-                
             }
-            catch let e as NetworkError {
-                switch e {
+            catch let error as NetworkError {
+                switch error {
                 case .connectivityError:
                     await MainActor.run {
                         toastVM = .init(title: "This functionality only available online , please check your network or try again after some time", type: .error)
                         self.screenText = "0"
                         lastOperation = .none
                     }
-                    
-                    
                 default: break
                 }
-                
             }
-            catch let e as OnlineOperatorError{
+            catch let error as OnlineOperatorError{
                 await MainActor.run {
-                    toastVM = .init(title: e.description, type: .error)
+                    toastVM = .init(title: error.description, type: .error)
                     self.screenText = "Invalid Input / Result"
                     lastOperation = .none
                 }
@@ -203,14 +194,12 @@ public final class CalculatorViewModel: ObservableObject {
                 print(error)
             }
         }
-        
     }
     
-    func handleTabActionButton(viewModel: CALCButtonViewModel)  {
+    func handleTabActionButton(viewModel: CALCButtonViewModel) {
         if viewModel.type == .online {
             onlineOperation(input: self.screenText, type: viewModel.type)
-        }
-        else if viewModel.type == .clearText {
+        } else if viewModel.type == .clearText {
             self.screenText = "0"
             self.lastOperation = .none
         } else if viewModel.type == .result {
@@ -220,26 +209,22 @@ public final class CalculatorViewModel: ObservableObject {
                 let value = try CalculatorOperationUtility.getTrigoValueforButtonType(buttonType: viewModel.type,
                                                                                       rawValue: self.screenText)
                 self.screenText = String(value ?? 0.0)
-                
             } catch {
                 self.screenText = "Invalid Number/ Result"
                 lastOperation = .none
             }
-        }
-        else {
+        } else {
             print(viewModel.type.rawValue)
             if viewModel.style.buttonStyle == .operation && lastOperation.style == .operation {
                 self.screenText.removeLast()
                 self.screenText += viewModel.title
-            }
-            else if viewModel.style.buttonStyle != .operation && (lastOperation == .result || lastOperation == .none) {
+            } else if viewModel.style.buttonStyle != .operation && (lastOperation == .result || lastOperation == .none) {
                 self.screenText = viewModel.type.rawValue
             } else {
                 if screenText != "0" {
-                    self.screenText = self.screenText + viewModel.type.rawValue
+                    self.screenText += viewModel.type.rawValue
                 } else {
                     self.screenText = viewModel.type.rawValue
-                    
                 }
             }
             lastOperation = viewModel.type
@@ -247,19 +232,19 @@ public final class CalculatorViewModel: ObservableObject {
     }
     
     func startNetworkMonitoring() {
-        let nc = NotificationCenter.default
+        let notificationCentre = NotificationCenter.default
         self.reachability.monitorNetworkChange()
         self.reachability.connectivityStatusPublisher
             .sink { [weak self] connectivityStatus in
                 DispatchQueue.main.async {
                     guard let strongSelf = self, connectivityStatus != .unknown else { return }
                     if connectivityStatus == .connected {
-                        nc.post(
+                        notificationCentre.post(
                             name: Notification.Name("NetworkConnectivityChangedToConnected"),
                             object: nil
                         )
                     } else {
-                        nc.post(
+                        notificationCentre.post(
                             name: Notification.Name("NetworkConnectivityChangedToNotConnected"),
                             object: nil
                         )
@@ -267,5 +252,4 @@ public final class CalculatorViewModel: ObservableObject {
                 }
             }
     }
-    
 }

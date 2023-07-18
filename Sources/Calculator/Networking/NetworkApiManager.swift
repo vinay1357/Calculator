@@ -12,30 +12,26 @@ protocol NetworkApiManagerProtocol {
 }
 
 final class CoinLayerNetworkApiManager: NetworkApiManagerProtocol {
-    
     private let urlSession: URLSession
     private let networkRechability: NetworkReachability = NetworkReachability.shared
-    
     private var baseUrl: String {
         return "api.coinlayer.com"
     }
-    
-    private var access_key: String {
+    private var accesskey: String {
         return "06121d407c19293dda11731ea366c986"
     }
-    
     init(urlSession: URLSession = URLSession.shared) {
         self.urlSession = urlSession
     }
-    
-    func perform<T: Decodable>(_ request: RequestProtocol) async throws -> T {
-        
+
+    func perform<T: Decodable>(_ request: RequestProtocol) async throws -> T
+    {
         if networkRechability.connectivityStatus != .connected {
             throw NetworkError.connectivityError
         }
         
         let (data, response) = try await urlSession.data(
-            for: request.createURLRequest(baseUrl: baseUrl, accessKey: access_key)
+            for: request.createURLRequest(baseUrl: baseUrl, accessKey: accesskey)
         )
         
         guard let httpResponse = response as? HTTPURLResponse else {

@@ -23,7 +23,7 @@ enum OnlineOperatorError: Error {
 }
 
 public protocol OnlineOperationProtocol {
-    func valueForOperation(inputValue:String, operationType: CalculatorButton) async throws -> Double?
+    func valueForOperation(inputValue: String, operationType: CalculatorButton) async throws -> Double?
 }
 
 public class BitCoinOnlineOperation: OnlineOperationProtocol {

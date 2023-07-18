@@ -17,8 +17,9 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vinay1357/ThemeKit.git", branch: "main"),
         
-            .package(url: "https://github.com/vinay1357/CalculatorUIComponent" , branch:"main")
+        .package(url: "https://github.com/vinay1357/CalculatorUIComponent" , branch:"main"),
         
+        .package(url: "https://github.com/realm/SwiftLint", .upToNextMajor(from: "0.52.4")),
     ],
     
     
@@ -31,7 +32,8 @@ let package = Package(
                 .product(name: "ThemeKit", package: "ThemeKit", condition: nil),
                 .product(name: "CalculatorUIComponent", package: "CalculatorUIComponent", condition: nil)
             ],
-            resources: [.process("SourceFile")]
+            resources: [.process("SourceFile")],
+            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         ),
         .testTarget(
             name: "CalculatorTests",

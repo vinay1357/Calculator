@@ -53,13 +53,13 @@ final class Assignment_CalculatorTests: XCTestCase {
 
         func testGetTrigoValueForInvalidNumberThrowsError() {
             XCTAssertThrowsError(try CalculatorOperationUtility.getTrigoValueforButtonType(buttonType: .sin, rawValue: "abc")) { error in
-                XCTAssertEqual(error as? ConversionError, ConversionError.NotANumber)
+                XCTAssertEqual(error as? ConversionError, ConversionError.notANumber)
             }
         }
     
     func testGetTrigoCosValueForInvalidNumberThrowsError() {
         XCTAssertThrowsError(try CalculatorOperationUtility.getTrigoValueforButtonType(buttonType: .cos, rawValue: "abc")) { error in
-            XCTAssertEqual(error as? ConversionError, ConversionError.NotANumber)
+            XCTAssertEqual(error as? ConversionError, ConversionError.notANumber)
         }
     }
 

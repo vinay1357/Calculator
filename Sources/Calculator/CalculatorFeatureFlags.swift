@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 // MARK: - CalculatorFeatureFlags
 public struct CalculatorFeatureFlags: Codable {
     let calculator: Calculator
@@ -20,9 +19,8 @@ public struct Calculator: Codable {
 }
 
 extension CalculatorFeatureFlags {
-    
-    public static var featureFlags:CalculatorFeatureFlags {
-        loadJson(fileName:"FeatureFlags")!
+    public static var featureFlags: CalculatorFeatureFlags {
+        loadJson(fileName: "FeatureFlags")!
     }
     
     private static func loadJson(fileName: String) -> CalculatorFeatureFlags? {
@@ -32,10 +30,8 @@ extension CalculatorFeatureFlags {
         do {
             let decoder = JSONDecoder()
             let data = try Data(contentsOf: url)
-            
             return try decoder.decode(CalculatorFeatureFlags.self, from: data)
-        }
-        catch {
+        } catch {
             print(error)
         }
         return nil

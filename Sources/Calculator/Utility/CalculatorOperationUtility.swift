@@ -13,19 +13,16 @@ class CalculatorOperationUtility {
         switch  buttonType {
         case .sin:
             guard let double = Double(rawValue) else {
-                throw ConversionError.NotANumber
+                throw ConversionError.notANumber
             }
-            return sin(double.deg2rad())
-            
+            return sin(double.deg2rad())            
         case .cos:
             guard let double = Double(rawValue) else {
-                throw ConversionError.NotANumber
+                throw ConversionError.notANumber
             }
             return cos(double.deg2rad())
-            
         default:
-            throw ConversionError.NotANumber
-            
+            throw ConversionError.notANumber
         }
     }
 }
